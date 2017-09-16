@@ -1,4 +1,4 @@
-# aub-ml
+# AUB CMPS396V: Machine Learning
 Programming assignments for the Machine Learning course at AUB. All of the programs are written in Python.
 
 ## Assignment 1: Perceptron Learning Algorithm
