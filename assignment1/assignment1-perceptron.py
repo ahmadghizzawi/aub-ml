@@ -22,12 +22,15 @@ class Perceptron:
         self.target_weights = np.array([x1B * x2A - x1A * x2B, x2B - x1A, x1A - x1B])
 
         # initialize training set and their correct labels
-        self.generate_training_set()
+        self.training_set, self.labels = self.generate_training_set()
 
         # initialize out_of_sample set
         self.test_set = np.random.uniform(-1, 1, size=(10000, 2))
         x0 = np.ones((10000, 1))
         self.test_set = np.insert(self.test_set, [0], x0, axis=1)
+
+        # initialize best_perceptron
+        self.best_perceptron = None
 
         # run the model with subset of the training_set
         self.run(n2, runs)
@@ -36,7 +39,7 @@ class Perceptron:
         self.run(n, runs)
 
     def generate_training_set(self):
-        '''Generates an n by 3 uniformally distributed dataset'''
+        """Generates an n by 3 uniformally distributed dataset"""
 
         # Generate random uniformally distributes points
         training_set = np.random.uniform(-1, 1, size=(self.N, 2))
@@ -51,13 +54,14 @@ class Perceptron:
         labels = np.array([labels]).T
 
         # Set training_set and labels as instance attributes
-        self.training_set = training_set
-        self.labels = labels
+        return training_set, labels
 
+    @staticmethod
     def apply(w, x):
         # apply h(x)
         return sign(np.dot(w, x))
 
+    @staticmethod
     def learn(w, x, label):
         # learn from misclassifications
         return w + label * x
@@ -112,12 +116,6 @@ class Perceptron:
         # Take a subset of the data set based on the passed set_size
         training_set = self.training_set[0:set_size]
         correct_labels = self.labels[0:set_size]
-
-        pla_labels = []
-        misclassfied_indexes = []
-
-        total_iterations = 0
-        total_incorrect = 0
 
         def apply_h(w):
             # labels dataset using the hypothesis's weight
@@ -185,15 +183,18 @@ class Perceptron:
 
         return total_misclassified / sample_size
 
-    def display_figures(self, set_size, average_iterations, difference):
+    @staticmethod
+    def display_figures(set_size, average_iterations, difference):
         print('Average iterations to converge for dataset N=' + str(set_size) + ': ' + str(average_iterations))
         print('Average P[f(x) != g(x)]: ' + str(difference))
 
     def run(self, size, runs):
-        print('Running for dataset N=' + str(size) + ' ' + str(
-            runs) + ' times and evaluating each hypothesis againt a 10,000 test_set.. This should take around a minute.')
+        print('Running for dataset N=' + str(size)
+              + ' ' +
+              str(runs)
+              + ' times and evaluating each hypothesis againt a 10,000 test_set.. This should take around a minute.')
 
-        # initialize best_perceptron
+        # reinitialize best_perceptron
         self.best_perceptron = [0, 0, 0, 100000]
 
         total_iterations = 0
@@ -208,7 +209,7 @@ class Perceptron:
         difference = self.evaluate_difference(self.best_perceptron[0:3])
 
         self.plot(size)
-        self.display_figures(size, average_iterations, difference)
+        Perceptron.display_figures(size, average_iterations, difference)
 
 
 perceptron = Perceptron(100, n2=10, runs=1000)
