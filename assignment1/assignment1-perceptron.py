@@ -112,7 +112,7 @@ class Perceptron:
         plt.show()
 
     def pla(self, set_size):
-        '''Perceptron Learning Alogrithm '''
+        """Perceptron Learning Algorithm """
         # Take a subset of the data set based on the passed set_size
         training_set = self.training_set[0:set_size]
         correct_labels = self.labels[0:set_size]
