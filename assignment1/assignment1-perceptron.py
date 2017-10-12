@@ -161,7 +161,7 @@ class Perceptron:
 
         # best_perceptron has the least difference
         difference = self.evaluate_difference(w)
-        if difference < self.best_perceptron[3]:
+        if self.best_perceptron is None or difference < self.best_perceptron[3]:
             self.best_perceptron = np.hstack((w, difference))
 
         return total_iterations, total_incorrect
@@ -195,7 +195,7 @@ class Perceptron:
               + ' times and evaluating each hypothesis againt a 10,000 test_set.. This should take around a minute.')
 
         # reinitialize best_perceptron
-        self.best_perceptron = [0, 0, 0, 100000]
+        self.best_perceptron = None
 
         total_iterations = 0
         i = 0
